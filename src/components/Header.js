@@ -1,63 +1,153 @@
-import React, { useState } from "react";
-import {
-  checkConnection,
-  retrievePublicKey,
-  getBalance,
-  getRequestAccess,
-  userInfo,
-} from "./Freighter";
+import React from 'react';
 
-const Header = ({ pubKey, setPubKey }) => {
-  const [connected, setConnected] = useState(false);
-  const [balance, setBalance] = useState("0");
-
-  const connectWallet = async () => {
-    try {
-      const allowed = await checkConnection();
-
-      if (!allowed) return alert("Permission denied");
-
-      const key = await retrievePublicKey();
-      const bal = await getBalance();
-
-      setPubKey(key);
-      setBalance(Number(bal).toFixed(2));
-      setConnected(true);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
+const Header = ({ stats }) => {
   return (
-    <div className="bg-gray-300 h-20 flex justify-between items-center px-10">
-      <div className="text-3xl font-bold">Stellar dApp</div>
-
-      <div className="flex items-center gap-4">
-        {pubKey && (
-          <>
-            <div className="p-2 bg-gray-50 border rounded-md">
-              {`${pubKey.slice(0, 4)}...${pubKey.slice(-4)}`}
-            </div>
-
-            <div className="p-2 bg-gray-50 border rounded-md">
-              Balance: {balance} XLM
-            </div>
-          </>
-        )}
-
-        <button
-          onClick={connectWallet}
-          disabled={connected}
-          className={`text-xl w-52 rounded-md p-4 font-bold text-white ${
-            connected
-              ? "bg-green-500 cursor-not-allowed"
-              : "bg-blue-400 hover:bg-blue-500"
-          }`}
-        >
-          {connected ? "Connected" : "Connect Wallet"}
-        </button>
+    <header style={{
+      position: 'relative',
+      borderBottom: '2px solid var(--ink)',
+      padding: '0 48px',
+      background: 'var(--ink)',
+      color: 'var(--paper)',
+      display: 'flex',
+      alignItems: 'stretch',
+      justifyContent: 'space-between',
+      gap: 0,
+      zIndex: 10
+    }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '28px 0',
+        borderRight: '1px solid rgba(245,242,235,0.15)',
+        paddingRight: '48px',
+        gap: '4px'
+      }}>
+        <span style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: '9px',
+          letterSpacing: '0.3em',
+          textTransform: 'uppercase',
+          color: 'var(--gold)',
+          opacity: 0.8
+        }}>Stellar · Soroban Testnet</span>
+        <h1 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: '32px',
+          lineHeight: 1,
+          color: 'var(--paper)'
+        }}>Grant<em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Tracker</em></h1>
       </div>
-    </div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'stretch'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 32px',
+          borderLeft: '1px solid rgba(245,242,235,0.1)',
+          gap: '2px',
+          cursor: 'pointer',
+          transition: 'background 0.2s'
+        }} title="Total grants submitted">
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '26px',
+            fontWeight: 800,
+            lineHeight: 1,
+            color: 'var(--gold)',
+            transition: 'color 0.3s'
+          }}>{stats.total || 0}</span>
+          <span style={{
+            fontSize: '8px',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,242,235,0.45)'
+          }}>Total</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 32px',
+          borderLeft: '1px solid rgba(245,242,235,0.1)',
+          gap: '2px',
+          cursor: 'pointer',
+          transition: 'background 0.2s'
+        }} title="Approved grants">
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '26px',
+            fontWeight: 800,
+            lineHeight: 1,
+            color: 'var(--jade-lt)',
+            transition: 'color 0.3s'
+          }}>{stats.approved || 0}</span>
+          <span style={{
+            fontSize: '8px',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,242,235,0.45)'
+          }}>Approved</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 32px',
+          borderLeft: '1px solid rgba(245,242,235,0.1)',
+          gap: '2px',
+          cursor: 'pointer',
+          transition: 'background 0.2s'
+        }} title="Funds disbursed">
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '26px',
+            fontWeight: 800,
+            lineHeight: 1,
+            color: 'var(--sky-lt)',
+            transition: 'color 0.3s'
+          }}>{stats.disbursed || 0}</span>
+          <span style={{
+            fontSize: '8px',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,242,235,0.45)'
+          }}>Disbursed</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '0 32px',
+          borderLeft: '1px solid rgba(245,242,235,0.1)',
+          gap: '2px',
+          cursor: 'pointer',
+          transition: 'background 0.2s'
+        }} title="Rejected grants">
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '26px',
+            fontWeight: 800,
+            lineHeight: 1,
+            color: 'var(--crimson-lt)',
+            transition: 'color 0.3s'
+          }}>{stats.rejected || 0}</span>
+          <span style={{
+            fontSize: '8px',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,242,235,0.45)'
+          }}>Rejected</span>
+        </div>
+      </div>
+    </header>
   );
 };
 
