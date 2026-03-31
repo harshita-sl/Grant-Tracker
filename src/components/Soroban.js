@@ -5,6 +5,7 @@ import {
   BASE_FEE,
   nativeToScVal,
   scValToNative,
+  xdr,
   rpc as StellarRpc,
 } from "@stellar/stellar-sdk";
 
@@ -82,6 +83,35 @@ async function contractInt(caller, fnName, values) {
   }
 
   throw new Error("Transaction timeout");
+}
+
+async function contractRead(caller, fnName, values) {
+  const sourceAccount = await server.getAccount(caller);
+  const contract = new Contract(CONTRACT_ADDRESS);
+  const builder = new TransactionBuilder(sourceAccount, TX_PARAMS);
+
+  if (Array.isArray(values)) {
+    builder.addOperation(contract.call(fnName, ...values));
+  } else if (values !== undefined && values !== null) {
+    builder.addOperation(contract.call(fnName, values));
+  } else {
+    builder.addOperation(contract.call(fnName));
+  }
+
+  const tx = builder.setTimeout(30).build();
+  const sim = await server.simulateTransaction(tx);
+
+  if (sim.error) {
+    throw new Error(sim.error);
+  }
+
+  const retval = sim?.result?.retval ?? sim?.retval ?? null;
+  if (!retval) return null;
+
+  if (typeof retval === "string") {
+    return scValToNative(xdr.ScVal.fromXDR(retval, "base64"));
+  }
+  return scValToNative(retval);
 }
 
 /* ================= Contract Functions ================= */
@@ -171,7 +201,7 @@ async function disburseGrant(caller, grantId) {
 async function viewGrant(caller, grantId) {
   try {
     const value = numberToU64(grantId);
-    const result = await contractInt(caller, "view_grant", value);
+    const result = await contractRead(caller, "view_grant", value);
 
     const grant = {
       grant_id:  Number(result.grant_id),
@@ -201,7 +231,7 @@ async function viewGrant(caller, grantId) {
 async function viewAdminRecord(caller, grantId) {
   try {
     const value = numberToU64(grantId);
-    const result = await contractInt(caller, "view_admin_record", value);
+    const result = await contractRead(caller, "view_admin_record", value);
 
     const adminRecord = {
       grant_id:    Number(result.grant_id),
@@ -227,7 +257,7 @@ async function viewAdminRecord(caller, grantId) {
  */
 async function viewAllGrantStatus(caller) {
   try {
-    const result = await contractInt(caller, "view_all_grant_status", null);
+    const result = await contractRead(caller, "view_all_grant_status", null);
 
     const status = {
       total:     Number(result.total),
