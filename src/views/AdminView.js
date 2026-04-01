@@ -87,7 +87,7 @@ const AdminView = ({
             return (
               <div
                 key={grant.grant_id}
-                className={`admin-grant-row status-${status} ${selectedGrant === grant ? 'selected' : ''}`}
+                className={`admin-grant-row status-${status} ${selectedGrant?.grant_id === grant.grant_id ? 'selected' : ''}`}
                 onClick={() => setSelectedGrant(grant)}
               >
                 <div className="agr-header">

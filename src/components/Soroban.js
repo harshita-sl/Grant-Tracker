@@ -234,7 +234,7 @@ async function viewAdminRecord(caller, grantId) {
     const result = await contractRead(caller, "view_admin_record", value);
 
     const adminRecord = {
-      grant_id:    Number(result.grant_id),
+      grant_id:    Number(result.grant_id) || grantId, // Fallback to requested grantId if not in response
       approved:    Boolean(result.approved),
       disbursed:   Boolean(result.disbursed),
       rejected:    Boolean(result.rejected),
