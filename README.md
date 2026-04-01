@@ -134,6 +134,7 @@ Frontend integration file:
 CASGDQQ7B5ZMVWRGZ5CYQMULRSJ3VNHZIP7U7CQYQRVGDJWDGRSQNKXP
 ```
 <img width="1890" height="804" alt="image" src="https://github.com/user-attachments/assets/880494cb-6b38-4f88-838b-3c1e2afc370e" />
+https://stellar.expert/explorer/testnet/contract/CASGDQQ7B5ZMVWRGZ5CYQMULRSJ3VNHZIP7U7CQYQRVGDJWDGRSQNKXP
 
 ### Core Contract Data Models
 
