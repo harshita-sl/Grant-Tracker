@@ -21,6 +21,7 @@
 ## Project Title
 
 **Grant Tracker** � a blockchain-based grant management web application powered by **Soroban smart contracts** on the **Stellar Testnet**.
+<img width="1894" height="971" alt="image" src="https://github.com/user-attachments/assets/e6342365-d95f-42ac-832a-6827a89cb05e" />
 
 ---
 
@@ -132,6 +133,7 @@ Frontend integration file:
 ```text
 CASGDQQ7B5ZMVWRGZ5CYQMULRSJ3VNHZIP7U7CQYQRVGDJWDGRSQNKXP
 ```
+<img width="1890" height="804" alt="image" src="https://github.com/user-attachments/assets/880494cb-6b38-4f88-838b-3c1e2afc370e" />
 
 ### Core Contract Data Models
 
